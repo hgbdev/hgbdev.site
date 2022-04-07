@@ -13,6 +13,10 @@ const withMDX = require('@next/mdx')({
 const nextConfig = withMDX({
   reactStrictMode: true,
   pageExtensions: ['ts', 'tsx', 'js', 'jsx', 'md', 'mdx'],
+  images: {
+    domains: ['avatars.githubusercontent.com'],
+  },
 })
 
 module.exports = nextConfig
+

@@ -25,6 +25,7 @@ a {
   animation: blink-animation 1s linear infinite;
   -webkit-animation: blink-animation 1s linear infinite;
 }
+
 @keyframes blink-animation {
   0% {
     opacity: 0;
@@ -36,6 +37,7 @@ a {
     opacity: 1;
   }
 }
+
 @-webkit-keyframes blink-animation {
   0% {
     opacity: 0;
