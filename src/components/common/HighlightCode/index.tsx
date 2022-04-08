@@ -11,7 +11,7 @@ interface IProps {
 const HighlightCode = (props: IProps) => {
   const { language, code } = props;
 
-  const highlight = hljs.highlight(code, { language: "js" }).value;
+  const highlight = hljs.highlight(code, { language: "typescript" }).value;
 
   return <div>{parse(highlight)}</div>;
 };

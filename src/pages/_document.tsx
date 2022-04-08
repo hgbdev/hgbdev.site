@@ -10,7 +10,7 @@ const AppDocument = (): JSX.Element => (
         rel="stylesheet"
       />
     </Head>
-    <body className="bg-gray-100 dark:bg-gray-800">
+    <body className="bg-gray-100">
       <Main />
       <NextScript />
     </body>

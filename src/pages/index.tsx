@@ -1,7 +1,7 @@
-import axios from "axios";
 import Home from "components/home";
 import { MDXRemoteSerializeResult } from "next-mdx-remote";
 import { serialize } from "next-mdx-remote/serialize";
+import GithubAPIRequest from "utils/requests";
 
 interface IProps {
   source: MDXRemoteSerializeResult<Record<string, unknown>>;
@@ -12,12 +12,12 @@ const HomePage = (props: IProps): JSX.Element => {
   return <Home source={source} />;
 };
 
-export async function getServerSideProps() {
-  const result = await axios.get(
-    "https://raw.githubusercontent.com/hgbdev/notes/main/leetcode/03.21.2022%20-%20763.%20Partition%20Labels.md?v=1"
-  );
-  const { data } = result;
-  const mdxSource = await serialize(data);
+export async function getStaticProps() {
+  const githubApiRequest = new GithubAPIRequest("hgbdev");
+  const contents = await githubApiRequest.getContents();
+  const readme = await githubApiRequest.getReadme(contents);
+
+  const mdxSource = await serialize(readme || "");
 
   return {
     props: { source: mdxSource },

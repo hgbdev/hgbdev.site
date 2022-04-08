@@ -1,3 +1,4 @@
+import { MDXRemote, MDXRemoteSerializeResult } from "next-mdx-remote";
 import HighlightCode from "../HighlightCode";
 
 const components = {
@@ -16,4 +17,13 @@ const components = {
   },
 };
 
-export default components;
+interface IProps {
+  source: MDXRemoteSerializeResult<Record<string, unknown>>;
+}
+
+const MDXComponent = (props: IProps): JSX.Element => {
+  const { source } = props;
+  return <MDXRemote {...source} components={components} />;
+};
+
+export default MDXComponent;
