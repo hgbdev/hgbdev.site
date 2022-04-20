@@ -1,9 +1,12 @@
+/* eslint-disable react/jsx-key */
+/* eslint-disable @next/next/no-html-link-for-pages */
 import Layout from "components/common/Layout";
 import MDXComponent from "components/common/MDXComponent";
 import { MDXRemoteSerializeResult } from "next-mdx-remote";
 import { serialize } from "next-mdx-remote/serialize";
 import Head from "next/head";
 import React from "react";
+import { mapUrlBreadcrumb, rawFileMdName } from "utils/helpers";
 import { IGithubContentItem } from "utils/interfaces";
 import GithubAPIRequest from "utils/requests";
 
@@ -16,29 +19,36 @@ interface IProps {
 
 const Post = (props: IProps): JSX.Element => {
   const { readme, slug, mdFiles, dirs } = props;
+  console.log("🚀 ~ file: [...slug].tsx ~ line 21 ~ slug", slug);
 
   return (
     <>
       <Head>
-        <title>HGB Dev</title>
+        <title>{rawFileMdName(slug)} | HGB Dev Personal Site</title>
       </Head>
-      <Layout path={slug.join(" / ")}>
+      <Layout path={mapUrlBreadcrumb(slug)} textPath={slug}>
         <>
           <MDXComponent source={readme} />
-          {dirs.length !== 0 && (
+          {dirs && dirs.length > 0 && (
             <ul>
               {dirs.map((item: IGithubContentItem) => (
                 <li className="list-[disclosure-closed]" key={item.name}>
-                  {item.name}
+                  <a title={item.name} href={`/${slug.join("/")}/${item.name}`}>
+                    {item.name}
+                  </a>
                 </li>
               ))}{" "}
             </ul>
           )}
 
-          {mdFiles.length !== 0 && (
+          {mdFiles && mdFiles.length > 0 && (
             <ul>
               {mdFiles.map((item: IGithubContentItem) => (
-                <li key={item.name}>{item.name}</li>
+                <li key={item.name}>
+                  <a title={item.name} href={`/${slug.join("/")}/${item.name}`}>
+                    {item.name}
+                  </a>
+                </li>
               ))}
             </ul>
           )}
@@ -52,21 +62,36 @@ export async function getServerSideProps(context: any) {
   try {
     const slug: string[] = context.params.slug;
     const [repo, ...path] = slug;
-
     const githubApiRequest = new GithubAPIRequest(repo, path);
-    const contents = await githubApiRequest.getContents();
 
-    const readme = await githubApiRequest.getReadme(contents);
-    const mdxReadme = await serialize(readme || "");
+    let isFile: boolean = false;
+    slug.forEach((e) => {
+      if (e.substring(e.length - 3) === ".md") isFile = true;
+    });
 
-    return {
-      props: {
-        readme: mdxReadme,
-        slug: context.params.slug,
-        mdFiles: githubApiRequest.mdFiles,
-        dirs: githubApiRequest.dirs,
-      },
-    };
+    if (isFile) {
+      const content: string = await githubApiRequest.getContentRawFile(
+        githubApiRequest.endpointRawFile()
+      );
+      const mdxReadme = await serialize(content || "");
+      return {
+        props: { slug: context.params.slug, readme: mdxReadme },
+      };
+    } else {
+      const contents = await githubApiRequest.getContents();
+
+      const readme = await githubApiRequest.getReadme(contents);
+      const mdxReadme = await serialize(readme || "");
+
+      return {
+        props: {
+          readme: mdxReadme,
+          slug: context.params.slug,
+          mdFiles: githubApiRequest.mdFiles,
+          dirs: githubApiRequest.dirs,
+        },
+      };
+    }
   } catch (err) {
     return {
       redirect: {

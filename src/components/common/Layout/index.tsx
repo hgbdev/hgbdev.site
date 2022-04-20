@@ -1,3 +1,5 @@
+/* eslint-disable react/jsx-key */
+/* eslint-disable @next/next/no-html-link-for-pages */
 import Image from "next/image";
 import React from "react";
 import Particles from "react-tsparticles";
@@ -5,11 +7,13 @@ import { COLORS } from "utils/colors";
 
 interface IProps {
   children: JSX.Element;
-  path?: string;
+  path?: string[];
+  textPath?: string[];
 }
 
 const Layout = (props: IProps): JSX.Element => {
-  const { children, path } = props;
+  const { children, path, textPath } = props;
+  console.log("🚀 ~ file: index.tsx ~ line 16 ~ path", path);
 
   const particles = {
     fpsLimit: 30,
@@ -42,7 +46,7 @@ const Layout = (props: IProps): JSX.Element => {
         >
           <div className="px-8 pb-6 pt-4">
             <div
-              className="no-underline font-bold flex items-center pb-8"
+              className="no-underline font-bold flex pb-8 items-center"
               title="hgbdev"
             >
               <Image
@@ -52,7 +56,18 @@ const Layout = (props: IProps): JSX.Element => {
                 alt="hgbdev"
                 className="rounded-full"
               />
-              <p className="ml-3"> hgbdev {path && "/ " + path}</p>
+              <p className="ml-3">
+                <a href="/">hgbdev</a>{" "}
+                {textPath &&
+                  path?.map((e, i) => (
+                    <>
+                      {" / "}
+                      <a href={`${e}`} key={i}>
+                        {textPath[i]}
+                      </a>
+                    </>
+                  ))}
+              </p>
               <span className="blink h-4 w-3 bg-slate-600 ml-1" />
             </div>
             <div>{children}</div>

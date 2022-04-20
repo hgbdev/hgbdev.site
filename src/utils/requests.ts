@@ -8,6 +8,7 @@ export default class GithubAPIRequest {
   readme: string = "readme.md";
   dirs: IGithubContentItem[] = [];
   mdFiles: IGithubContentItem[] = [];
+  branch: string = "main";
 
   constructor(repo: string, path?: string[], owner?: string) {
     this.repo = repo;
@@ -17,6 +18,10 @@ export default class GithubAPIRequest {
 
   endpointContents = (): string => {
     return `https://api.github.com/repos/${this.owner}/${this.repo}/contents/${this.path}`;
+  };
+
+  endpointRawFile = (): string => {
+    return `https://raw.githubusercontent.com/${this.owner}/${this.repo}/${this.branch}/${this.path}`;
   };
 
   async getContents(): Promise<IGithubContentItem[]> {
@@ -29,7 +34,7 @@ export default class GithubAPIRequest {
     );
     this.mdFiles = mdFiles;
 
-    const dirs = data.filter((e: IGithubContentItem) => e.type === "dir")
+    const dirs = data.filter((e: IGithubContentItem) => e.type === "dir");
     this.dirs = dirs;
 
     return data;
@@ -48,5 +53,11 @@ export default class GithubAPIRequest {
         resolver(null);
       });
     }
+  }
+
+  async getContentRawFile(url: string): Promise<string> {
+    const response = await axios.get(url);
+    const data = response.data;
+    return data;
   }
 }
