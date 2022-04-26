@@ -15,6 +15,8 @@ const components = {
       );
     }
   },
+
+  h2: (props: any) => <h2 {...props}>{props.children}</h2>,
 };
 
 interface IProps {

@@ -9,7 +9,11 @@ interface IProps {
 
 const HomePage = (props: IProps): JSX.Element => {
   const { source } = props;
-  return <Home source={source} />;
+  return (
+    <div id="index">
+      <Home source={source} />
+    </div>
+  );
 };
 
 export async function getStaticProps() {

@@ -17,7 +17,7 @@ const Error = (props: IProps): JSX.Element => {
       <Head>
         <title>Not found</title>
       </Head>
-      <Layout path="NOT_FOUND.md">
+      <Layout path={[""]} textPath={["NOT_FOUND.md"]}>
         <MDXComponent source={source} />
       </Layout>
     </>

@@ -16,7 +16,7 @@ const HomeComponent = (props: IProps): JSX.Element => {
       <Head>
         <title>HGB Dev | Personal Site</title>
       </Head>
-      <Layout path="README.md">
+      <Layout path={[""]} textPath={["README.md"]}>
         <MDXComponent source={source} />
       </Layout>
     </>

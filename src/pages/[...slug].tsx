@@ -6,7 +6,7 @@ import { MDXRemoteSerializeResult } from "next-mdx-remote";
 import { serialize } from "next-mdx-remote/serialize";
 import Head from "next/head";
 import React from "react";
-import { mapUrlBreadcrumb, rawFileMdName } from "utils/helpers";
+import { isMdFile, mapUrlBreadcrumb, rawFileMdName } from "utils/helpers";
 import { IGithubContentItem } from "utils/interfaces";
 import GithubAPIRequest from "utils/requests";
 
@@ -19,7 +19,6 @@ interface IProps {
 
 const Post = (props: IProps): JSX.Element => {
   const { readme, slug, mdFiles, dirs } = props;
-  console.log("🚀 ~ file: [...slug].tsx ~ line 21 ~ slug", slug);
 
   return (
     <>
@@ -66,7 +65,7 @@ export async function getServerSideProps(context: any) {
 
     let isFile: boolean = false;
     slug.forEach((e) => {
-      if (e.substring(e.length - 3) === ".md") isFile = true;
+      if (isMdFile(e)) isFile = true;
     });
 
     if (isFile) {

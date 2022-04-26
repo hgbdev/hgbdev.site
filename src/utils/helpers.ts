@@ -1,5 +1,7 @@
 export function rawFileMdName(slug: string[]): string {
-  return slug[slug.length - 1].slice(0, -3);
+  return isMdFile(slug[slug.length - 1])
+    ? slug[slug.length - 1].slice(0, -3)
+    : slug[slug.length - 1];
 }
 
 export function mapUrlBreadcrumb(slug: string[]): string[] {
@@ -13,4 +15,8 @@ export function mapUrlBreadcrumb(slug: string[]): string[] {
     }
     return result;
   });
+}
+
+export function isMdFile(name: string): boolean {
+  return name.substring(name.length - 3) === ".md";
 }
