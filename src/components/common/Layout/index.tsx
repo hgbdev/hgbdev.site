@@ -18,30 +18,26 @@ const Layout = (props: IProps): JSX.Element => {
       <div className="mx-auto min-h-screen flex justify-center pt-16 px-4 lg:pt-24 relative z-10">
         <div className="prose lg:prose-xl mb-4 w-ful h-max">
           <div className="px-8 pb-6 pt-4">
-            <div
-              className="no-underline font-bold flex pb-8 items-center"
-              title="hgbdev"
-            >
-              <Image
-                src="https://avatars.githubusercontent.com/u/61721550"
-                width={40}
-                height={40}
-                alt="hgbdev"
-                className="rounded-full"
-              />
-              <p className="ml-3">
+            <div className="no-underline font-bold flex pb-8 mb-8 items-center">
+              <div className="w-[60px] flex">
+                <Image
+                  src="https://avatars.githubusercontent.com/u/61721550"
+                  width={40}
+                  height={40}
+                  alt="hgbdev"
+                  className="rounded-full"
+                />
+              </div>
+              <div className="ml-3 blink">
                 <a href="/">hgbdev</a>{" "}
                 {textPath &&
                   path?.map((e, i) => (
-                    <>
-                      {" / "}
-                      <a href={`${e}`} key={i.toString()}>
-                        {textPath[i]}
-                      </a>
-                    </>
+                    <span key={i}>
+                      <span className="text-gray-400"> / </span>
+                      <a href={`${e}`}>{textPath[i]}</a>
+                    </span>
                   ))}
-              </p>
-              <span className="blink h-4 w-3 bg-slate-600 ml-1" />
+              </div>
             </div>
             <div>{children}</div>
           </div>
